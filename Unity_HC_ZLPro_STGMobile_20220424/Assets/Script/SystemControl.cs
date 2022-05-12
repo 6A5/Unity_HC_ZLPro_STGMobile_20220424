@@ -21,12 +21,16 @@ namespace NkE1
         private float rangeDirectionIcon;
         [SerializeField, Header("角色旋轉速度"), Range(0, 50)]
         private float speedTurn;
+        [SerializeField, Header("動畫參數")]
+        private string parameterWalk = "Running";
 
+        private Animator ani;
         private Rigidbody rig;
 
         private void Awake()
         {
             rig = GetComponent<Rigidbody>();
+            ani = GetComponent<Animator>();
         }
 
         private void Update()
@@ -34,6 +38,7 @@ namespace NkE1
             // GetJoystickValue();
             UpdateDirectionIconPos();
             LookDirectionIcon();
+            UpdateAnimation();
         }
 
         private void FixedUpdate()
@@ -78,6 +83,15 @@ namespace NkE1
             transform.rotation = Quaternion.Lerp(transform.rotation, look, speedTurn * Time.deltaTime);
             // 歐拉角 = 0 Y歐拉角 0
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        }
+
+        /// <summary>
+        /// 動畫改變
+        /// </summary>
+        private void UpdateAnimation()
+        {
+            bool run = joystick.Horizontal != 0 || joystick.Vertical != 0;
+            ani.SetBool(parameterWalk, run);
         }
     }
 }
