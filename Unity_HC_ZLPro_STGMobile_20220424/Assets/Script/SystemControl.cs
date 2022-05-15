@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace NkE1
     /// 控制系統
     /// 虛擬搖桿
     /// </summary>
-    public class SystemControl : MonoBehaviour
+    public class SystemControl : MonoBehaviourPun
     {
         [SerializeField, Header("虛擬搖桿")]
         private Joystick joystick;
@@ -23,6 +24,12 @@ namespace NkE1
         private float speedTurn;
         [SerializeField, Header("動畫參數")]
         private string parameterWalk = "Running";
+        [SerializeField, Header("畫布")]
+        private GameObject m_canvas;
+        [SerializeField, Header("玩家資訊")]
+        private GameObject m_info;
+        [SerializeField, Header("玩家面向")]
+        private GameObject m_direction;
 
         private Animator ani;
         private Rigidbody rig;
@@ -31,6 +38,13 @@ namespace NkE1
         {
             rig = GetComponent<Rigidbody>();
             ani = GetComponent<Animator>();
+
+            if (photonView.IsMine)
+            {
+                Instantiate(m_canvas);
+                Instantiate(m_info);
+                Instantiate(m_direction);
+            }
         }
 
         private void Update()
