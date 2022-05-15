@@ -10,8 +10,9 @@ namespace NkE1
     /// </summary>
     public class SystemAttack : MonoBehaviour
     {
-        [SerializeField, Header("發射子彈")]
-        private Button btnFire;
+        [HideInInspector]
+        public Button btnFire;
+
         [SerializeField, Header("子彈")]
         private GameObject goProjectile;
         [SerializeField, Header("最大數量")]

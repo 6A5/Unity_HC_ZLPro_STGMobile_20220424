@@ -18,7 +18,7 @@ namespace NkE1
         /// <summary>
         /// 儲存座標生成清單
         /// </summary>
-        private List<Transform> traSpawnPointList;
+        [SerializeField]private List<Transform> traSpawnPointList;
 
         private void Awake()
         {
@@ -26,18 +26,18 @@ namespace NkE1
             traSpawnPointList = traSpawnPoint.ToList();
 
             // 如果是連線進入的玩家 生成物件
-            if (photonView.IsMine)
-            {
+            //if (photonView.IsMine)
+            //{
                 // 取得清單中其中一個Index (0 , 清單長度) -- Unity的API不會到最大值
                 int index = Random.Range(0, traSpawnPointList.Count);
                 // 根據Index取出Tra
                 Transform tra = traSpawnPointList[index];
 
-                PhotonNetwork.Instantiate(goCharacter.name, Vector3.zero, Quaternion.identity);
+                PhotonNetwork.Instantiate(goCharacter.name, tra.position, Quaternion.identity);
 
                 // 移除List中的Index的Tra
                 traSpawnPointList.RemoveAt(index);
-            }
+            //}
         }
     }
 }
