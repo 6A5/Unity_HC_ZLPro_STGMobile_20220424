@@ -1,7 +1,9 @@
+using Cinemachine;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 namespace NkE1
 {
@@ -9,28 +11,63 @@ namespace NkE1
     /// 控制系統
     /// 虛擬搖桿
     /// </summary>
-    public class SystemControl : MonoBehaviour
+    public class SystemControl : MonoBehaviourPun
     {
-        [SerializeField, Header("虛擬搖桿")]
-        private Joystick joystick;
         [SerializeField, Header("移動速度"), Range(0, 100)]
         private float speed = 3.5f;
-        [SerializeField, Header("角色方向圖示")]
-        private Transform traDirectionIcon;
         [SerializeField, Header("角色方向圖示範圍"), Range(1f, 2.5f)]
         private float rangeDirectionIcon;
         [SerializeField, Header("角色旋轉速度"), Range(0, 50)]
         private float speedTurn;
         [SerializeField, Header("動畫參數")]
         private string parameterWalk = "Running";
+        [SerializeField, Header("畫布")]
+        private GameObject m_canvas;
+        [SerializeField, Header("玩家資訊")]
+        private GameObject m_info;
+        [SerializeField, Header("玩家面向")]
+        private GameObject m_direction;
 
         private Animator ani;
         private Rigidbody rig;
+        private Joystick joystick;
+        private Transform traDirectionIcon;
+        private CinemachineVirtualCamera cvc;
+        private SystemAttack systemAttack;
 
         private void Awake()
         {
             rig = GetComponent<Rigidbody>();
             ani = GetComponent<Animator>();
+            systemAttack = GetComponent<SystemAttack>();
+
+            if (photonView.IsMine)
+            {
+                PlayerUIFollow follow = Instantiate(m_info).GetComponent<PlayerUIFollow>();
+                follow.traPlayer = transform;
+
+                // 取得搖桿
+                GameObject tempCanvas = Instantiate(m_canvas);
+                joystick = tempCanvas.transform.Find("Floating Joystick").GetComponent<Joystick>();
+                systemAttack.btnFire = tempCanvas.transform.Find("Fire").GetComponent<Button>();
+
+                Instantiate(m_info);
+
+                // 取得方向圖示
+                traDirectionIcon = Instantiate(m_direction).transform;
+
+                // 取得攝影機管理器
+                cvc = GameObject.Find("CM Manager").GetComponent<CinemachineVirtualCamera>();
+                // 指定追蹤物件
+                cvc.Follow = transform;
+
+
+            }
+            // 避免控制到別的物件
+            else 
+            {
+                enabled = false;
+            }
         }
 
         private void Update()

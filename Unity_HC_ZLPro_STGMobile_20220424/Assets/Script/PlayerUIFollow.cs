@@ -14,11 +14,11 @@ namespace NkE1
         private Vector3 v3Offset;
 
         private string namePlayer = "Warrior";
-        private Transform traPlayer;
+        public Transform traPlayer;
 
         private void Awake()
         {
-            traPlayer = GameObject.Find(namePlayer).transform;
+            // traPlayer = GameObject.Find(namePlayer).transform;
         }
 
         private void Update()

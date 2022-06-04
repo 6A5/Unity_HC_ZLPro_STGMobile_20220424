@@ -28,6 +28,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        // 秆猂
+        Screen.SetResolution(1024, 576, false);
+
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -87,6 +90,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         int maxCount = PhotonNetwork.CurrentRoom.MaxPlayers; // 讽玡┬丁程计
 
         textCountPlayer.text = currentCount + " / " + maxCount;
+
+        StartGame(currentCount, maxCount);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -98,5 +103,20 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         int maxCount = PhotonNetwork.CurrentRoom.MaxPlayers; // 讽玡┬丁程计
 
         textCountPlayer.text = currentCount + " / " + maxCount;
+
+        StartGame(currentCount, maxCount);
+    }
+
+    /// <summary>
+    /// 更闽
+    /// </summary>
+    /// <param name="currentCount">讽玡计</param>
+    /// <param name="maxCount">程计</param>
+    public void StartGame(int currentCount, int maxCount) 
+    {
+        if (currentCount == maxCount)
+        {
+            PhotonNetwork.LoadLevel("GameScene");
+        }
     }
 }
